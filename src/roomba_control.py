@@ -1,132 +1,150 @@
 import time
 import serial
 
-PORT = 0
-
-
-def init():
-    ser = serial.Serial(PORT, baudrate=19200,timeout=0.1) # test other baud: 57600
-    ser.open()
-    # wake up robot
-    ser.setRTS (0)
-    time.sleep (0.1)
-    ser.setRTS (1)
-    time.sleep (2)
-    # pulse device-detect three times
-    for i in range (3):
+class Roomba:
+    """
+    Roomba class to control the robot vacuum cleaner.
+    
+    Simple wrapper of the serial class, with human readable functions
+    
+    """
+    def __init__(self):
+        ser = serial.Serial(
+            port='/dev/ttyS0',
+            baudrate=19200, # test other baud: 57600
+            timeout=0.1
+            ) 
+        
+        # wake up robot
         ser.setRTS (0)
-        time.sleep (0.25)
+        time.sleep (0.1)
         ser.setRTS (1)
-        time.sleep (0.25)
-    return ser
+        time.sleep (2)
+        # pulse device-detect three times
+        for i in range (3):
+            ser.setRTS (0)
+            time.sleep (0.25)
+            ser.setRTS (1)
+            time.sleep (0.25)
 
-def start(ser):
-    """start SCI"""
-    ser.write(chr(128))
+        self = ser
 
-def safe_mode(ser):
-    ser.write(chr(131))    
+    def close(self):
+        self.close()
 
-def vacuum_on(ser):
-    ser.write(chr(138))
-    ser.write(chr(2))
+    def start(self):
+        """start SCI (set roomba in passive mode)"""
+        self.write(chr(128).encode())
 
-def vacuum_off(ser):
-    ser.write(chr(138))
-    ser.write(chr(0))
+    def start_cleaning(self):
+        """start normal cleaning cycle"""
+        self.write(chr(135).encode())
 
-def light_test(ser):
-    """Example: to turn on the dirt detect and spot LEDs, make the status
-    LED red, and to light the power LED green at half intensity,
-    send the serial byte sequence [139] [25] [0] [128]"""
-    ser.write(chr(139))
-    ser.write(chr(25))
-    ser.write(chr(0))
-    ser.write(chr(128))
+    def safe_mode(self):
+        self.write(chr(131).encode())    
 
-def beep(ser):
-    """In this example we will send Roomba commands that will cause the robot to “beep”.
+    def vacuum_on(self):
+        self.write(chr(138).encode())
+        self.write(chr(2).encode())
 
-    128 132 (Press the “Send Numbers” button)
-    140 0 1 62 32 (Press the “Send Numbers” button)
-    141 0 (Press the “Send Numbers” button)
+    def vacuum_off(self):
+        self.write(chr(138).encode())
+        self.write(chr(0).encode())
 
-    """
+    def light_test(self):
+        """Example: to turn on the dirt detect and spot LEDs, make the status
+        LED red, and to light the power LED green at half intensity,
+        send the serial byte sequence [139] [25] [0] [128]"""
+        self.write(chr(139).encode())
+        self.write(chr(25).encode())
+        self.write(chr(0).encode())
+        self.write(chr(128).encode())
 
-    ser.write(chr(128))
-    ser.write(chr(132))
-    ser.write(chr(140))
-    ser.write(chr(0))
-    ser.write(chr(1))
-    ser.write(chr(62))
-    ser.write(chr(32))
-    ser.write(chr(141))
-    ser.write(chr(0))
+    def beep(self):
+        """In this example we will send Roomba commands that will cause the robot to “beep”.
 
-def drive_forward(ser):
-    """
-    128 131 (Press the “Send Numbers” button)
-    137 0 100 128 0 (Press the “Send Numbers” button)
-    """
-    ser.write(chr(128))
-    ser.write(chr(131))
-    ser.write(chr(137))
-    ser.write(chr(0))
-    ser.write(chr(100))
-    ser.write(chr(128))
-    ser.write(chr(0))
+        128 132 (Press the “Send Numbers” button)
+        140 0 1 62 32 (Press the “Send Numbers” button)
+        141 0 (Press the “Send Numbers” button)
 
-def drive_backward(ser):
-    """
-    128 131 (Press the “Send Numbers” button)
-    137 255 156 128 0 (Press the “Send Numbers” button)
-    """
-    ser.write(chr(128))
-    ser.write(chr(131))
-    ser.write(chr(137))
-    ser.write(chr(255))
-    ser.write(chr(156))
-    ser.write(chr(128))
-    ser.write(chr(0))
+        """
 
-def turn_right(ser):
-    """
-    128 131 (Press the “Send Numbers” button)
-    137 0 100 255 255 (Press the “Send Numbers” button)
-    """
-    ser.write(chr(128))
-    ser.write(chr(131))
-    ser.write(chr(137))
-    ser.write(chr(0))
-    ser.write(chr(100))
-    ser.write(chr(255))
-    ser.write(chr(255))
+        self.write(chr(128).encode())
+        self.write(chr(132).encode())
+        self.write(chr(140).encode())
+        self.write(chr(0).encode())
+        self.write(chr(1).encode())
+        self.write(chr(62).encode())
+        self.write(chr(32).encode())
+        self.write(chr(141).encode())
+        self.write(chr(0).encode())
 
-def turn_left(ser):
-    """
-    128 131 (Press the “Send Numbers” button)
-    137 0 100 0 1 (Press the “Send Numbers” button)
-    """
-    ser.write(chr(128))
-    ser.write(chr(131))
-    ser.write(chr(137))
-    ser.write(chr(0))
-    ser.write(chr(100))
-    ser.write(chr(0))
-    ser.write(chr(1))
+    def drive_forward(self):
+        """
+        128 131 (Press the “Send Numbers” button)
+        137 0 100 128 0 (Press the “Send Numbers” button)
+        """
+        self.write(chr(128).encode())
+        self.write(chr(131).encode())
+        self.write(chr(137).encode())
+        self.write(chr(0).encode())
+        self.write(chr(100).encode())
+        self.write(chr(128).encode())
+        self.write(chr(0).encode())
+
+    def drive_backward(self):
+        """
+        128 131 (Press the “Send Numbers” button)
+        137 255 156 128 0 (Press the “Send Numbers” button)
+        """
+        self.write(chr(128).encode())
+        self.write(chr(131).encode())
+        self.write(chr(137).encode())
+        self.write(chr(255).encode())
+        self.write(chr(156).encode())
+        self.write(chr(128).encode())
+        self.write(chr(0).encode())
+
+    def turn_right(self):
+        """
+        128 131 (Press the “Send Numbers” button)
+        137 0 100 255 255 (Press the “Send Numbers” button)
+        """
+        self.write(chr(128).encode())
+        self.write(chr(131).encode())
+        self.write(chr(137).encode())
+        self.write(chr(0).encode())
+        self.write(chr(100).encode())
+        self.write(chr(255).encode())
+        self.write(chr(255).encode())
+
+    def turn_left(self):
+        """
+        128 131 (Press the “Send Numbers” button)
+        137 0 100 0 1 (Press the “Send Numbers” button)
+        """
+        self.write(chr(128).encode())
+        self.write(chr(131).encode())
+        self.write(chr(137).encode())
+        self.write(chr(0).encode())
+        self.write(chr(100).encode())
+        self.write(chr(0).encode())
+        self.write(chr(1).encode())
 
 if __name__ == "__main__":
 
-    ser = init()
+    roomba = Roomba.init()
+    print(roomba.ser)
 
-    # start(ser)
-    # safe_mode(ser)
-    # vacuum_on(ser)
-    # light_test(ser)
-    # beep(ser)
-    # time.sleep(5)
-    # vacuum_off(ser)
-    # ser.close()
+    roomba.start()
+    roomba.start_cleaning()
+    # roomba.safe_mode()
+    # roomba.vacuum_on()
+    # roomba.light_test()
+    # roomba.beep()
+    time.sleep(5)
+    # roomba.vacuum_off()
+    roomba.close()
 
 
 
