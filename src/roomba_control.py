@@ -9,8 +9,7 @@ def start(ser):
     ser.write(chr(128))
 
 def safe_mode(ser):
-    ser.write(chr(131))
-    
+    ser.write(chr(131))    
 
 def vacuum_on(ser):
     ser.write(chr(138))
@@ -47,6 +46,58 @@ def beep(ser):
     ser.write(chr(32))
     ser.write(chr(141))
     ser.write(chr(0))
+
+def drive_forward(ser):
+    """
+    128 131 (Press the “Send Numbers” button)
+    137 0 100 128 0 (Press the “Send Numbers” button)
+    """
+    ser.write(chr(128))
+    ser.write(chr(131))
+    ser.write(chr(137))
+    ser.write(chr(0))
+    ser.write(chr(100))
+    ser.write(chr(128))
+    ser.write(chr(0))
+
+def drive_backward(ser):
+    """
+    128 131 (Press the “Send Numbers” button)
+    137 255 156 128 0 (Press the “Send Numbers” button)
+    """
+    ser.write(chr(128))
+    ser.write(chr(131))
+    ser.write(chr(137))
+    ser.write(chr(255))
+    ser.write(chr(156))
+    ser.write(chr(128))
+    ser.write(chr(0))
+
+def turn_right(ser):
+    """
+    128 131 (Press the “Send Numbers” button)
+    137 0 100 255 255 (Press the “Send Numbers” button)
+    """
+    ser.write(chr(128))
+    ser.write(chr(131))
+    ser.write(chr(137))
+    ser.write(chr(0))
+    ser.write(chr(100))
+    ser.write(chr(255))
+    ser.write(chr(255))
+
+def turn_left(ser):
+    """
+    128 131 (Press the “Send Numbers” button)
+    137 0 100 0 1 (Press the “Send Numbers” button)
+    """
+    ser.write(chr(128))
+    ser.write(chr(131))
+    ser.write(chr(137))
+    ser.write(chr(0))
+    ser.write(chr(100))
+    ser.write(chr(0))
+    ser.write(chr(1))
 
 if __name__ == "__main__":
 
