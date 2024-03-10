@@ -20,6 +20,6 @@ def func_key_received(roomba):
             roomba.turn_left()
     return key_received
 
-roomba = Roomba.init()
+roomba = Roomba()
 key_received = func_key_received(roomba)
 run_event_loop(print_add, print_remove, key_received)
