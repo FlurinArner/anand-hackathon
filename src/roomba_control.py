@@ -4,6 +4,22 @@ import serial
 PORT = 0
 
 
+def init():
+    ser = serial.Serial(PORT, baudrate=19200,timeout=0.1) # test other baud: 57600
+    ser.open()
+    # wake up robot
+    ser.setRTS (0)
+    time.sleep (0.1)
+    ser.setRTS (1)
+    time.sleep (2)
+    # pulse device-detect three times
+    for i in range (3):
+        ser.setRTS (0)
+        time.sleep (0.25)
+        ser.setRTS (1)
+        time.sleep (0.25)
+    return ser
+
 def start(ser):
     """start SCI"""
     ser.write(chr(128))
@@ -101,19 +117,7 @@ def turn_left(ser):
 
 if __name__ == "__main__":
 
-    ser = serial.Serial(PORT, baudrate=19200,timeout=0.1) # test other baud: 57600
-    ser.open()
-    # wake up robot
-    ser.setRTS (0)
-    time.sleep (0.1)
-    ser.setRTS (1)
-    time.sleep (2)
-    # pulse device-detect three times
-    for i in range (3):
-        ser.setRTS (0)
-        time.sleep (0.25)
-        ser.setRTS (1)
-        time.sleep (0.25)
+    ser = init()
 
     # start(ser)
     # safe_mode(ser)

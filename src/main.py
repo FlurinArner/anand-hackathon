@@ -17,4 +17,5 @@ def key_received(key):
     elif key.keytype == "Button" and key.number == 3: 
         roomba_control.turn_left()
 
+roomba_control.init()
 run_event_loop(print_add, print_remove, key_received)
