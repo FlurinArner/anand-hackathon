@@ -135,15 +135,15 @@ if __name__ == "__main__":
 
     roomba = Roomba()
     print(roomba)
-
-    roomba.start()
-    roomba.start_cleaning()
-    # roomba.safe_mode()
-    # roomba.vacuum_on()
-    # roomba.light_test()
-    # roomba.beep()
-    time.sleep(5)
-    # roomba.vacuum_off()
+    for i in range(100):
+        roomba.start()
+        roomba.start_cleaning()
+        # roomba.safe_mode()
+        # roomba.vacuum_on()
+        # roomba.light_test()
+        # roomba.beep()
+        time.sleep(1)
+        # roomba.vacuum_off()
     roomba.close()
 
 
